@@ -4,6 +4,6 @@ public record LoginResponseDto(
     String accessToken,
     String refreshToken,
     String tokenType,
-    int accessExpirationMs,
-    int refreshExpirationMs
+    long accessExpirationMs,
+    long refreshExpirationMs
 ) { }
