@@ -24,4 +24,15 @@ public class Constants {
         public static final String REQUEST_ID_HEADER = "X-Request-Id";
         public static final String MDC_KEY = "requestId";
     }
+
+    public static final class SecurityConstants {
+
+        private SecurityConstants() { }
+
+        public static final String[] PUBLIC_ENDPOINTS = {
+                "/api/v1/auth/**",
+                "/api/v1/public",
+                "/api/v1/swagger-ui/**",
+        };
+    }
 }
