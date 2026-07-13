@@ -39,11 +39,12 @@ public class UserRepositoryImpl implements UserRepository {
     public boolean existsByEmail(String email) {
         try {
             return jdbcClient.sql(Sql.UserQueries.CHECK_EMAIL_EXISTS)
+                    .param(email)
                     .param(Boolean.TRUE)
                     .query(Long.class)
                     .single() > 0;
         } catch (DataAccessException e) {
-            log.error("Error verifying email existence: {}",
+            log.error("Error verifying existence for email={}: {}", email,
                     e.getMessage(), e);
             throw new UserException("Error verifying email");
         }
@@ -54,6 +55,7 @@ public class UserRepositoryImpl implements UserRepository {
         try {
             return jdbcClient.sql(Sql.UserQueries.GET_USER_BY_PRINCIPAL_ID)
                     .param(principalId)
+                    .param(Boolean.TRUE)
                     .query(User.class)
                     .optional();
         } catch (DataAccessException e) {
@@ -65,10 +67,18 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User createUser(User user) {
         try {
-            return jdbcClient.sql(Sql.UserQueries.CREATE_USER)
-                        .paramSource(user)
-                        .query(User.class)
-                        .single();
+            jdbcClient.sql(Sql.UserQueries.CREATE_USER)
+                    .param(user.name())
+                    .param(user.email())
+                    .param(user.password())
+                    .param(user.active())
+                    .param(user.createdBy())
+                    .param(user.createdAt())
+                    .param(user.updatedBy())
+                    .param(user.updatedAt())
+                    .param(user.principal().id())
+                    .update();
+            return user;
         } catch (DataAccessException e) {
             log.error("Error creating user with email={}: {}", user.email(), e.getMessage(), e);
             throw new UserException("Error creating user");
@@ -79,9 +89,10 @@ public class UserRepositoryImpl implements UserRepository {
     public User deleteUser(long id, long deletedBy) {
         try {
             return jdbcClient.sql(Sql.UserQueries.DELETE_USER)
-                    .param(id)
+                    .param(Boolean.FALSE)
                     .param(deletedBy)
                     .param(Instant.now().toEpochMilli())
+                    .param(id)
                     .query(User.class)
                     .single();
         } catch (DataAccessException e) {
