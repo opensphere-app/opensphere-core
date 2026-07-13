@@ -5,6 +5,8 @@ import java.util.Set;
 public record User(
     long id,
 
+    String name,
+
     String email,
 
     String password,
