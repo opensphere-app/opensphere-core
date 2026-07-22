@@ -38,4 +38,14 @@ public class Sql {
                 
                 """;
     }
+
+    public static final class PermissionQueries {
+
+        private PermissionQueries() { }
+
+        public static final String GET_PERMISSION_BY_ID = """
+                SELECT id, name, description FROM permission
+                WHERE id = ?
+                """;
+    }
 }
