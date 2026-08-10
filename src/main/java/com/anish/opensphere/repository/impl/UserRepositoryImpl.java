@@ -21,7 +21,7 @@ public class UserRepositoryImpl implements UserRepository {
     private final JdbcClient jdbcClient;
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Optional<User> getUserByEmail(String email) {
         try {
             return jdbcClient.sql(Sql.UserQueries.GET_USER_BY_EMAIL)
                     .param(email)
@@ -51,7 +51,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<User> findByPrincipalId(long principalId) {
+    public Optional<User> getUserByPrincipalId(long principalId) {
         try {
             return jdbcClient.sql(Sql.UserQueries.GET_USER_BY_PRINCIPAL_ID)
                     .param(principalId)
@@ -67,7 +67,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User createUser(User user) {
         try {
-            jdbcClient.sql(Sql.UserQueries.CREATE_USER)
+            Long id = jdbcClient.sql(Sql.UserQueries.CREATE_USER)
                     .param(user.name())
                     .param(user.email())
                     .param(user.password())
@@ -77,8 +77,10 @@ public class UserRepositoryImpl implements UserRepository {
                     .param(user.updatedBy())
                     .param(user.updatedAt())
                     .param(user.principal().id())
-                    .update();
-            return user;
+                    .query(Long.class)
+                    .single();
+            return new User(id, user.name(), user.email(), user.password(), user.principal(), user.active(),
+                    user.createdAt(), user.createdBy(), user.updatedAt(), user.updatedBy(), user.roles());
         } catch (DataAccessException e) {
             log.error("Error creating user with email={}: {}", user.email(), e.getMessage(), e);
             throw new UserException("Error creating user");
@@ -100,21 +102,4 @@ public class UserRepositoryImpl implements UserRepository {
             throw new UserException("Error deleting user");
         }
     }
-
-//    @Override
-//    public boolean existsRolesByRoleName(String roleName) {
-//        try {
-//
-//        } catch (DataAccessException e) {
-//            log.error("Error fetching roles by role name={}: {}", roleName, e.getMessage(), e);
-//            throw new UserException("Error fetching roles by role name");
-//        }
-//    }
-//    Optional<User> findByEmail(String email);
-//
-//    boolean existsByEmail(String email);
-//
-//    Optional<User> findByPrincipalId(long principalId);
-//
-//    boolean existsRolesByRoleName(String roleName);
 }

@@ -1,10 +1,11 @@
-package com.anish.opensphere.repository;
+package com.anish.opensphere.service;
 
+import com.anish.opensphere.dto.CreateUserRequestDto;
 import com.anish.opensphere.entity.User;
 
 import java.util.Optional;
 
-public interface UserRepository {
+public interface UserService {
 
     Optional<User> getUserByEmail(String email);
 
@@ -12,8 +13,7 @@ public interface UserRepository {
 
     Optional<User> getUserByPrincipalId(long principalId);
 
-    User createUser(User user);
+    User createUser(CreateUserRequestDto createUserRequestDto);
 
     User deleteUser(long id, long deletedBy);
-//    boolean existsRolesByRoleName(String roleName);
 }
