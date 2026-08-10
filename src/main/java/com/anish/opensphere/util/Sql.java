@@ -56,17 +56,20 @@ public class Sql {
 
         public static final String GET_ROLE_BY_ID = """
                 SELECT id, role_name, description
+                FROM role
                 WHERE id = ? AND deleted_by IS NULL
                 """;
 
         public static final String GET_ROLES = """
                 SELECT id, role_name, description
+                FROM role
                 WHERE deleted_by IS NULL
                 """;
 
         public static final String GET_ROLE_BY_ROLE_NAME = """
                 SELECT id, role_name, description
-                WHERE deleted_by IS NULL
+                FROM role
+                WHERE role_name = ? AND deleted_by IS NULL
                 """;
 
         public static final String CHECK_ROLE_EXISTS_BY_NAME = """
@@ -87,12 +90,12 @@ public class Sql {
 
         public static final String UPDATE_ROLE = """
                 UPDATE role SET role_name = ?, description = ?, updated_by = ?, updated_at = ?
-                WHERE id = ?
+                WHERE id = ? AND deleted_by IS NULL
                 """;
 
         public static final String DELETE_ROLE = """
                 UPDATE role SET deleted_by = ?, deleted_at = ?
-                WHERE id = ?
+                WHERE id = ? AND deleted_by IS NULL
                 RETURNING id, role_name, description
                 """;
     }

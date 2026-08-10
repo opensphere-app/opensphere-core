@@ -15,7 +15,7 @@ public class PermissionServiceImpl implements PermissionService {
     private final PermissionRepository permissionRepository;
 
     @Override
-    public Optional<Permission> findById(long id) {
-        return permissionRepository.findById(id);
+    public Optional<Permission> getPermissionById(long id) {
+        return permissionRepository.getPermissionById(id);
     }
 }
