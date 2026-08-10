@@ -20,7 +20,7 @@ public class PermissionRepositoryImpl implements PermissionRepository {
     private final JdbcClient jdbcClient;
 
     @Override
-    public Optional<Permission> findById(long id) {
+    public Optional<Permission> getPermissionById(long id) {
         try {
             return jdbcClient.sql(Sql.PermissionQueries.GET_PERMISSION_BY_ID)
                     .param(id)

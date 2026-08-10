@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface PermissionRepository {
 
-    Optional<Permission> findById(long id);
+    Optional<Permission> getPermissionById(long id);
 }

@@ -27,6 +27,7 @@ public class Sql {
                 INSERT INTO user (name, email, password, active, created_by, created_at,
                 updated_by, updated_at, principal_id) VALUES
                 (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                RETURNING id
                 """;
 
         public static final String DELETE_USER = """
@@ -46,6 +47,53 @@ public class Sql {
         public static final String GET_PERMISSION_BY_ID = """
                 SELECT id, name, description FROM permission
                 WHERE id = ?
+                """;
+    }
+
+    public static final class RoleQueries {
+
+        private RoleQueries() { }
+
+        public static final String GET_ROLE_BY_ID = """
+                SELECT id, role_name, description
+                WHERE id = ? AND deleted_by IS NULL
+                """;
+
+        public static final String GET_ROLES = """
+                SELECT id, role_name, description
+                WHERE deleted_by IS NULL
+                """;
+
+        public static final String GET_ROLE_BY_ROLE_NAME = """
+                SELECT id, role_name, description
+                WHERE deleted_by IS NULL
+                """;
+
+        public static final String CHECK_ROLE_EXISTS_BY_NAME = """
+                SELECT COUNT(*) FROM role
+                WHERE role_name = ? AND deleted_by IS NULL
+                """;
+
+        public static final String CHECK_ROLE_EXISTS_BY_ID = """
+                SELECT COUNT(*) FROM role
+                WHERE id = ? AND deleted_by IS NULL
+                """;
+
+        public static final String CREATE_ROLE = """
+                INSERT INTO role (role_name, description, created_by, created_at, updated_by, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?)
+                RETURNING id
+                """;
+
+        public static final String UPDATE_ROLE = """
+                UPDATE role SET role_name = ?, description = ?, updated_by = ?, updated_at = ?
+                WHERE id = ?
+                """;
+
+        public static final String DELETE_ROLE = """
+                UPDATE role SET deleted_by = ?, deleted_at = ?
+                WHERE id = ?
+                RETURNING id, role_name, description
                 """;
     }
 }

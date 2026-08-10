@@ -6,11 +6,11 @@ import java.util.Optional;
 
 public interface UserRepository {
 
-    Optional<User> findByEmail(String email);
+    Optional<User> getUserByEmail(String email);
 
     boolean existsByEmail(String email);
 
-    Optional<User> findByPrincipalId(long principalId);
+    Optional<User> getUserByPrincipalId(long principalId);
 
     User createUser(User user);
 

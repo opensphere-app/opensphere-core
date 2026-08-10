@@ -1,7 +1,6 @@
 package com.anish.opensphere.service.impl;
 
 import com.anish.opensphere.dto.CreateUserRequestDto;
-import com.anish.opensphere.entity.Principal;
 import com.anish.opensphere.entity.User;
 import com.anish.opensphere.exception.UserAlreadyExistsException;
 import com.anish.opensphere.repository.UserRepository;
@@ -18,31 +17,25 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    @Override
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.getUserByEmail(email);
     }
 
+    @Override
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
 
-    public Optional<User> findByPrincipalId(long principalId) {
-        return userRepository.findByPrincipalId(principalId);
+    @Override
+    public Optional<User> getUserByPrincipalId(long principalId) {
+        return userRepository.getUserByPrincipalId(principalId);
     }
 
-    @Transactional()
-    public User createUser(CreateUserRequestDto userRequestDto) {
-
-        if(userRepository.existsByEmail(userRequestDto.email())) {
-            throw new UserAlreadyExistsException("User with email "
-                    + userRequestDto.email() + " already exists");
-        }
+    @Override
+    public User createUser(CreateUserRequestDto createUserRequestDto) {
         // TODO
-//
-//        Principal principal = new Principal(
-//
-//        )
-//        return userRepository.createUser(user);
+        return null;
     }
 
     public User deleteUser(long id, long deletedBy) {
